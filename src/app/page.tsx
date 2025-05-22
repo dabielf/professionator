@@ -19,6 +19,7 @@ export default function Page() {
 	const [tab, setTab] = useState("real");
 
 	function professionalize() {
+		if (!input || input.trim() === "") return;
 		setTab("professional");
 		append({ content: input, role: "user" });
 	}
@@ -67,6 +68,7 @@ export default function Page() {
 							if (event.key === "Enter") {
 								event.stopPropagation();
 								event.preventDefault();
+								if (!input || input.trim() === "") return;
 								setTab("professional");
 								append({ content: input, role: "user" });
 							}
