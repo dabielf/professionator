@@ -35,3 +35,27 @@
 	--depth: 0;
 	--noise: 0;
 }
+
+body {
+	font-size: 16px;
+}
+.container {
+	width: 90%;
+	margin: 0 auto;
+}
+
+/* Styles for tablets and larger */
+@media (min-width: 768px) {
+	body {
+		font-size: 18px;
+	}
+	.container {
+		width: 80%;
+		max-width: 960px; /* Optional max width */
+	}
+}
+
+/* Styles for desktops */
+@media (min-width: 1024px) {
+	/* Further adjustments */
+}
