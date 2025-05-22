@@ -41,13 +41,13 @@ export default function Page() {
 			</h2>
 			<Tabs value={tab} onValueChange={setTab} className="w-full h-full flex">
 				<TabsList className="w-full">
-					<TabsTrigger value="real" className="flex-1">
+					<TabsTrigger value="real" className="flex-1 text-base">
 						<AngryIcon className="size-4 mr-2" />
 						Be Real
 					</TabsTrigger>
 					<TabsTrigger
 						value="professional"
-						className="flex-1"
+						className="flex-1 text-base"
 						disabled={!input}
 					>
 						<SmilePlus className="size-4 mr-2" />
@@ -56,7 +56,7 @@ export default function Page() {
 				</TabsList>
 				<TabsContent value="real" className="flex flex-1 flex-col gap-4">
 					<textarea
-						className="relative textarea flex-1 w-full bg-base-300 text-white text-xl md:text-lg p-6"
+						className="relative textarea flex-1 w-full bg-base-300 min-h-[30vh] text-white text-lg md:text-base p-6"
 						placeholder="Be Real"
 						disabled={!!messages[1]}
 						value={input}
@@ -75,7 +75,7 @@ export default function Page() {
 					{messages[1] ? (
 						<button
 							type="button"
-							className="btn btn-primary py-4"
+							className="btn btn-primary btn-lg py-4"
 							onClick={() => reset()}
 						>
 							<RotateCcw className="size-4" />
@@ -84,7 +84,7 @@ export default function Page() {
 					) : (
 						<button
 							type="button"
-							className="btn btn-accent py-4"
+							className="btn btn-accent btn-lg py-4"
 							onClick={() => professionalize()}
 						>
 							<RotateCcw className="size-4" />
@@ -98,34 +98,34 @@ export default function Page() {
 				>
 					{messages[1] ? (
 						<div className="w-full flex flex-1 flex-col gap-4">
-							<div className="relative flex-1 bg-base-300 text-white/80 p-6 font-mono text-xl md:text-lg overflow-y-auto">
+							<div className="relative flex-1 bg-base-300 text-white/80 p-6 font-mono text-lg md:text-base overflow-y-auto">
 								{messages[1].content}
 							</div>
-							<div className="flex gap-2">
+							<div className="flex flex-col gap-2">
 								<button
 									type="button"
-									className="btn btn-primary flex-2 py-4"
-									onClick={() => reset()}
-								>
-									<RotateCcw className="size-4" />
-									New one
-								</button>
-								<button
-									type="button"
-									className="btn btn-accent flex-1"
+									className="btn btn-lg btn-accent flex-1 py-4"
 									onClick={() =>
 										navigator.clipboard.writeText(messages[1].content)
 									}
 								>
 									<Clipboard className="size-4" />
-									Copy
+									Copy to clipboard
+								</button>
+								<button
+									type="button"
+									className="btn btn-lg btn-primary flex-2 py-4"
+									onClick={() => reset()}
+								>
+									<RotateCcw className="size-4" />
+									Write a new message
 								</button>
 							</div>
 						</div>
 					) : (
-						<div className="flex flex-1 items-center justify-center">
+						<div className="flex flex-1 items-center justify-center mt-4">
 							Making it professional
-							<span className="ml-2 mt-4 loading loading-dots loading-md" />
+							<span className="ml-2 loading loading-dots loading-md" />
 						</div>
 					)}
 				</TabsContent>
