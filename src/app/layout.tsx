@@ -4,6 +4,8 @@ import { Raleway } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
+import SafariViewportFix from "@/components/safari-viewport-fix";
+
 const raleway = Raleway({ variable: "--font-raleway", subsets: ["latin"] });
 
 const geistMono = Geist_Mono({
@@ -42,6 +44,12 @@ export const metadata: Metadata = {
 			},
 		],
 	},
+	viewport: {
+		width: "device-width",
+		initialScale: 1.0,
+		maximumScale: 1.0, // This is key for the zoom issue
+		userScalable: false, // Next.js will translate this to user-scalable=no
+	},
 };
 
 export default function RootLayout({
@@ -51,16 +59,13 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<meta
-				name="viewport"
-				content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-			/>
 			<body
 				className={`${raleway.variable} ${geistMono.variable} antialiased overflow-y-auto h-[100dvh] text-xl md:text-lg`}
 			>
 				<main>
 					{children}
 					<Toaster richColors position="top-center" />
+					<SafariViewportFix />
 				</main>
 			</body>
 		</html>
