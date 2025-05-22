@@ -87,6 +87,7 @@ export default function Page() {
 						<button
 							type="button"
 							className="btn btn-accent btn-lg py-4"
+							disabled={!input || input.trim() === ""}
 							onClick={() => professionalize()}
 						>
 							<RotateCcw className="size-4" />
