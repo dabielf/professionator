@@ -22,8 +22,8 @@ const SafariViewportFix = () => {
 				} else {
 					// If no viewport meta tag exists (less likely if using Next.js metadata API), create one.
 					viewportMeta = document.createElement("meta");
-					viewportMeta.name = "viewport";
-					viewportMeta.content = targetContent;
+					viewportMeta.setAttribute("name", "viewport");
+					viewportMeta.setAttribute("content", targetContent);
 					document.head.appendChild(viewportMeta);
 					// console.log('Viewport meta tag created for iOS Safari.'); // Optional: for debugging
 				}
