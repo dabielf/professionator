@@ -52,7 +52,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+			<meta
+				name="viewport"
+				content="width=device-width, initial-scale=1.0, user-scalable=no"
+			/>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-y-auto h-[100dvh] text-xl md:text-lg`}
 			>
