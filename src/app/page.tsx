@@ -137,9 +137,11 @@ export default function Page() {
 							</div>
 						</div>
 					) : (
-						<div className="flex flex-1 items-center justify-center mt-4">
-							Making it professional
-							<span className="ml-2 loading loading-dots loading-md" />
+						<div className="flex flex-col flex-1 items-center justify-center text-center mt-8">
+							Making it <br />
+							as professional <br />
+							as can be
+							<span className="mt-2 loading loading-dots loading-md" />
 						</div>
 					)}
 				</TabsContent>
