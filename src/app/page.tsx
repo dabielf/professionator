@@ -31,7 +31,7 @@ export default function Page() {
 	}
 
 	return (
-		<div className={`flex flex-col w-full h-screen p-2 ${raleway.className}`}>
+		<div className={`flex flex-col w-full h-full p-2 ${raleway.className}`}>
 			<h1 className="text-4xl font-semibold text-center mt-6">
 				PROFESSIONATOR{" "}
 			</h1>
