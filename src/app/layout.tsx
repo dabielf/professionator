@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
+import { Raleway } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
-});
+const raleway = Raleway({ variable: "--font-raleway", subsets: ["latin"] });
 
 const geistMono = Geist_Mono({
 	variable: "--font-geist-mono",
@@ -57,9 +56,12 @@ export default function RootLayout({
 				content="width=device-width, initial-scale=1.0, user-scalable=no"
 			/>
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-y-auto h-[100dvh] text-xl md:text-lg`}
+				className={`${raleway.variable} ${geistMono.variable} antialiased overflow-y-auto h-[100dvh] text-xl md:text-lg`}
 			>
-				<main>{children}</main>
+				<main>
+					{children}
+					<Toaster richColors position="top-center" />
+				</main>
 			</body>
 		</html>
 	);

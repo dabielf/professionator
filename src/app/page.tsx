@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
+import { styleText } from "util";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -108,9 +110,19 @@ export default function Page() {
 								<button
 									type="button"
 									className="btn btn-lg btn-accent flex-1 py-4"
-									onClick={() =>
-										navigator.clipboard.writeText(messages[1].content)
-									}
+									onClick={() => {
+										navigator.clipboard.writeText(messages[1].content);
+										toast.success(
+											"Your VERY professional message has been copied to clipboard!",
+											{
+												style: {
+													fontFamily: "var(--font-raleway)",
+													fontSize: "1rem",
+													fontWeight: "normal",
+												},
+											},
+										);
+									}}
 								>
 									<Clipboard className="size-4" />
 									Copy to clipboard
