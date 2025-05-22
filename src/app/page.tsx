@@ -124,8 +124,8 @@ export default function Page() {
 						</div>
 					) : (
 						<div className="flex flex-1 items-center justify-center">
-							Making it professional{" "}
-							<span className="mr-2 loading loading-dots loading-md" />
+							Making it professional
+							<span className="ml-2 mt-4 loading loading-dots loading-md" />
 						</div>
 					)}
 				</TabsContent>
