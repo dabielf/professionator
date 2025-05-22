@@ -56,7 +56,7 @@ export default function Page() {
 				</TabsList>
 				<TabsContent value="real" className="flex flex-1 flex-col gap-4">
 					<textarea
-						className="relative textarea flex-1 w-full bg-base-300 text-white text-lg p-6"
+						className="relative textarea flex-1 w-full bg-base-300 text-white text-xl md:text-lg p-6"
 						placeholder="Be Real"
 						disabled={!!messages[1]}
 						value={input}
@@ -98,7 +98,7 @@ export default function Page() {
 				>
 					{messages[1] ? (
 						<div className="w-full flex flex-1 flex-col gap-4">
-							<div className="relative flex-1 bg-base-300 text-white/80 p-6 font-mono text-sm overflow-y-auto">
+							<div className="relative flex-1 bg-base-300 text-white/80 p-6 font-mono text-xl md:text-lg overflow-y-auto">
 								{messages[1].content}
 							</div>
 							<div className="flex gap-2">

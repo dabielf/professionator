@@ -54,7 +54,7 @@ export default function RootLayout({
 		<html lang="en">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-y-auto h-[100dvh] text-lg`}
+				className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-y-auto h-[100dvh] text-xl md:text-lg`}
 			>
 				<main>{children}</main>
 			</body>
