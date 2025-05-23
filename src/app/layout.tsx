@@ -20,11 +20,15 @@ export const metadata: Metadata = {
 		title: "Professionator",
 		description: "Stay professional while respecting your inner asshole",
 		type: "website",
-		url: "https://professionator.frandab.com",
+		url: process.env.PRODUCTION
+			? process.env.PRODUCTION_URL
+			: "http://localhost:3000",
 		siteName: "Professionator",
 		images: [
 			{
-				url: "https://professionator.frandab.com/Professionator@2x.jpg",
+				url: process.env.PRODUCTION
+					? `${process.env.PRODUCTION_URL}/Professionator@2x.jpg`
+					: "http://localhost:3000/Professionator@2x.jpg",
 				width: 1200,
 				height: 630,
 				alt: "Professionator",
@@ -37,7 +41,9 @@ export const metadata: Metadata = {
 		card: "summary_large_image",
 		images: [
 			{
-				url: "https://professionator.frandab.com/Professionator@2x.jpg",
+				url: process.env.PRODUCTION
+					? `${process.env.PRODUCTION_URL}/Professionator@2x.jpg`
+					: "http://localhost:3000/Professionator@2x.jpg",
 				width: 1200,
 				height: 630,
 				alt: "Professionator",
