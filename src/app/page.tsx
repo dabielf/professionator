@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import posthog from "posthog-js";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function Page() {
 	function professionalize() {
 		if (!input || input.trim() === "") return;
 		setTab("professional");
+		posthog.capture("professionalize", { message: input });
 		append({ content: input, role: "user" });
 	}
 

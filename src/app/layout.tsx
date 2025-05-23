@@ -3,6 +3,7 @@ import { Geist_Mono } from "next/font/google";
 import { Raleway } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { PostHogProvider } from "./providers";
 
 import SafariViewportFix from "@/components/safari-viewport-fix";
 
@@ -69,7 +70,7 @@ export default function RootLayout({
 				className={`${raleway.variable} ${geistMono.variable} antialiased overflow-y-auto h-[100dvh] text-xl md:text-lg`}
 			>
 				<main>
-					{children}
+					<PostHogProvider>{children}</PostHogProvider>
 					<Toaster richColors position="top-center" />
 					<SafariViewportFix />
 				</main>
