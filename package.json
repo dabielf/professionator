@@ -9,7 +9,13 @@
 		"lint": "next lint",
 		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
 		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-		"cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+		"cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+		"db:generate": "drizzle-kit generate",
+		"db:check": "drizzle-kit check",
+		"db:push": "drizzle-kit push",
+		"db:migrate": "wrangler d1 migrations apply communicator_db --remote",
+		"db:migrate:local": "wrangler d1 migrations apply communicator_db",
+		"db:studio": "drizzle-kit studio"
 	},
 	"dependencies": {
 		"@ai-sdk/google": "^1.2.18",
@@ -48,6 +54,8 @@
 		"clsx": "^2.1.1",
 		"cmdk": "^1.1.1",
 		"date-fns": "^3.6.0",
+		"drizzle-kit": "^0.31.1",
+		"drizzle-orm": "^0.43.1",
 		"embla-carousel-react": "^8.6.0",
 		"input-otp": "^1.4.2",
 		"lucide-react": "^0.511.0",

@@ -1,10 +1,13 @@
-import { streamText } from "ai";
+import { streamText, type StreamTextResult } from "ai";
 import {
 	createGoogleGenerativeAI,
 	type GoogleGenerativeAIProviderOptions,
 } from "@ai-sdk/google";
 import { PostHog } from "posthog-node";
 import { withTracing } from "@posthog/ai";
+import { getDB } from "@/server/db";
+
+import { messages as messageTable } from "@/server/db/schema";
 
 // interface Env {
 // 	GOOGLE_API_KEY: string;
@@ -14,10 +17,6 @@ import { withTracing } from "@posthog/ai";
 // 	NEXT_PUBLIC_POSTHOG_HOST: string;
 // 	ASSETS: Fetcher;
 // }
-
-const phClient = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
-	host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-});
 
 function systemPrompt(userInput: string, language = "English") {
 	return `
@@ -59,10 +58,6 @@ Provide ONLY the rephrased professional message. Absolutely no preambles, apolog
 `;
 }
 
-// interface RequestWithEnv extends Request {
-// 	env: Env;
-// }
-
 interface Body {
 	language?: string;
 	messages: { role: string; content: string }[];
@@ -73,27 +68,69 @@ export async function POST(req: Request) {
 	const language = body?.language || "English";
 	const messages = body?.messages;
 
+	// const bindings = await getBindings();
+
+	const phClient = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
+		host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+	});
+
+	const db = await getDB();
+	try {
+		await db.insert(messageTable).values({
+			content: messages[messages.length - 1].content,
+			translation: "",
+		});
+	} catch (error) {
+		console.error("Error inserting message:", (error as Error).message);
+	}
+
 	const key = process.env.GOOGLE_API_KEY;
 
 	const google = createGoogleGenerativeAI({
 		apiKey: key,
 	});
 
-	const result = streamText({
-		model: withTracing(google("gemini-2.5-flash-preview-04-17"), phClient, {}),
-		providerOptions: {
-			google: {
-				thinkingConfig: {
-					thinkingBudget: 20000,
-				},
-			} satisfies GoogleGenerativeAIProviderOptions,
+	let result: StreamTextResult<
+		{
+			tools: never;
+			partialOutput: never;
 		},
-		system: systemPrompt(messages[0].content, language),
-		messages: messages.map((message) => ({
-			role: message.role as "user" | "assistant",
-			content: message.content,
-		})),
-	});
+		string
+	>;
+
+	try {
+		result = streamText({
+			model: withTracing(
+				google("gemini-2.5-flash-preview-04-17"),
+				phClient,
+				{},
+			),
+			providerOptions: {
+				google: {
+					thinkingConfig: {
+						thinkingBudget: 20000,
+					},
+				} satisfies GoogleGenerativeAIProviderOptions,
+			},
+			system: systemPrompt(messages[0].content, language),
+			messages: messages.map((message) => ({
+				role: message.role as "user" | "assistant",
+				content: message.content,
+			})),
+		});
+	} catch (error) {
+		console.error("Error during text streaming:", error);
+		phClient.shutdown();
+		return Response.json(
+			{
+				error: "An error occurred while processing your request.",
+				message: (error as Error).message,
+			},
+			{
+				status: 500,
+			},
+		);
+	}
 
 	phClient.shutdown();
 	return result.toDataStreamResponse();
