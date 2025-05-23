@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
 	},
 	// This is required to support PostHog trailing slash API requests
 	skipTrailingSlashRedirect: true,
+	experimental: {
+		staleTimes: {
+			dynamic: 20,
+		},
+	},
 };
 
 export default nextConfig;
