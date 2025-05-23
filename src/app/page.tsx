@@ -12,19 +12,48 @@ import {
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+
+import { languages } from "@/modules/languages";
 import posthog from "posthog-js";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
 export default function Page() {
-	const { messages, setMessages, input, setInput, append, stop } = useChat();
 	const [tab, setTab] = useState("real");
+	const [language, setLanguage] = useState<string | "base">("base");
+	const { messages, setMessages, input, setInput, append, stop } = useChat();
+
+	console.log(language);
+
+	function LanguageSelector() {
+		return (
+			<div className="flex-1 flex items-center w-full">
+				<select
+					value={language}
+					onChange={(e) => {
+						setLanguage(e.target.value);
+					}}
+					className="select select-accent w-full"
+				>
+					<option disabled={true} value="base">
+						Select the language for your answer
+					</option>
+					{languages.map((language) => (
+						<option key={language.value}>{language.label}</option>
+					))}
+				</select>
+			</div>
+		);
+	}
 
 	function professionalize() {
 		if (!input || input.trim() === "") return;
 		setTab("professional");
-		posthog.capture("professionalize", { message: input });
-		append({ content: input, role: "user" });
+		posthog.capture("professionalize", {
+			message: input,
+			language: language === "base" ? undefined : language,
+		});
+		append({ content: input, role: "user" }, { body: { language } });
 	}
 
 	function reset() {
@@ -60,7 +89,7 @@ export default function Page() {
 				</TabsList>
 				<TabsContent value="real" className="flex flex-1 flex-col gap-4">
 					<textarea
-						className="relative textarea flex-1 w-full bg-base-300 min-h-[30vh] text-white text-lg md:text-base p-6"
+						className="relative textarea flex-1 w-full bg-base-300 min-h-[30vh] text-white text-lg md:text-base mb-2 p-6"
 						placeholder="Be Real"
 						disabled={!!messages[1]}
 						value={input}
@@ -87,15 +116,18 @@ export default function Page() {
 							Start a new one
 						</button>
 					) : (
-						<button
-							type="button"
-							className="btn btn-accent btn-lg py-4"
-							disabled={!input || input.trim() === ""}
-							onClick={() => professionalize()}
-						>
-							<RotateCcw className="size-4" />
-							Professionalize
-						</button>
+						<div className="flex flex-col md:flex-row gap-4 items-center">
+							<LanguageSelector />
+							<button
+								type="button"
+								className="btn flex-1 w-full md:w-auto btn-accent btn-lg py-2"
+								disabled={!input || input.trim() === ""}
+								onClick={() => professionalize()}
+							>
+								<RotateCcw className="size-4" />
+								Professionalize
+							</button>
+						</div>
 					)}
 				</TabsContent>
 				<TabsContent
@@ -139,7 +171,7 @@ export default function Page() {
 							</div>
 						</div>
 					) : (
-						<div className="flex flex-col flex-1 items-center justify-center text-center mt-8">
+						<div className="flex flex-col flex-1 text-lg items-center justify-center text-center mt-8">
 							Making it <br />
 							as professional <br />
 							as can be

@@ -1,4 +1,4 @@
-import { streamText, type UIMessage } from "ai";
+import { streamText } from "ai";
 import {
 	createGoogleGenerativeAI,
 	type GoogleGenerativeAIProviderOptions,
@@ -10,7 +10,7 @@ const phClient = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
 	host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
 });
 
-function systemPrompt(userInput: string) {
+function systemPrompt(userInput: string, language = "English") {
 	return `
 	SYSTEM_INSTRUCTION:
 
@@ -46,12 +46,14 @@ Mentally (or as an internal step) analyze the user's raw input to identify speci
 User's raw, unfiltered thoughts will be provided in ${userInput}.
 
 **Strict Output Format:**
-Provide ONLY the rephrased professional message. Absolutely no preambles, apologies, self-corrections, disclaimers, or any other text outside of the refined message itself.
+Provide ONLY the rephrased professional message. Absolutely no preambles, apologies, self-corrections, disclaimers, or any other text outside of the refined message itself. The output should absolutely be translated into ${language}.
 `;
 }
 
 export async function POST(req: Request) {
-	const { messages }: { messages: UIMessage[] } = await req.json();
+	const body = await req.json();
+	const language = body?.language || "English";
+	const messages = body?.messages;
 
 	const google = createGoogleGenerativeAI({
 		apiKey: process.env.GOOGLE_API_KEY,
@@ -66,7 +68,7 @@ export async function POST(req: Request) {
 				},
 			} satisfies GoogleGenerativeAIProviderOptions,
 		},
-		system: systemPrompt(messages[0].content),
+		system: systemPrompt(messages[0].content, language),
 		messages,
 	});
 
