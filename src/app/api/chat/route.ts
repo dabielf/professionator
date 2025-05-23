@@ -5,9 +5,10 @@ import {
 } from "@ai-sdk/google";
 import { PostHog } from "posthog-node";
 import { withTracing } from "@posthog/ai";
+import { env } from "@/lib/server-utils";
 
-const phClient = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
-	host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+const phClient = new PostHog(env.NEXT_PUBLIC_POSTHOG_KEY, {
+	host: env.NEXT_PUBLIC_POSTHOG_HOST,
 });
 
 function systemPrompt(userInput: string, language = "English") {
@@ -50,13 +51,25 @@ Provide ONLY the rephrased professional message. Absolutely no preambles, apolog
 `;
 }
 
+// interface RequestWithEnv extends Request {
+// 	env: Env;
+// }
+
+interface Body {
+	language?: string;
+	messages: { role: string; content: string }[];
+}
+
 export async function POST(req: Request) {
-	const body = await req.json();
+	const body = (await req.json()) as Body;
 	const language = body?.language || "English";
 	const messages = body?.messages;
 
+	// const key = process.env.GOOGLE_API_KEY;
+	const key = env.GOOGLE_API_KEY;
+
 	const google = createGoogleGenerativeAI({
-		apiKey: process.env.GOOGLE_API_KEY,
+		apiKey: key,
 	});
 
 	const result = streamText({
@@ -69,7 +82,10 @@ export async function POST(req: Request) {
 			} satisfies GoogleGenerativeAIProviderOptions,
 		},
 		system: systemPrompt(messages[0].content, language),
-		messages,
+		messages: messages.map((message) => ({
+			role: message.role as "user" | "assistant",
+			content: message.content,
+		})),
 	});
 
 	phClient.shutdown();
