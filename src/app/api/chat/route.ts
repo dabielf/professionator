@@ -3,6 +3,12 @@ import {
 	createGoogleGenerativeAI,
 	type GoogleGenerativeAIProviderOptions,
 } from "@ai-sdk/google";
+import { PostHog } from "posthog-node";
+import { withTracing } from "@posthog/ai";
+
+const phClient = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
+	host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+});
 
 function systemPrompt(userInput: string) {
 	return `
@@ -52,7 +58,7 @@ export async function POST(req: Request) {
 	});
 
 	const result = streamText({
-		model: google("gemini-2.5-flash-preview-04-17"),
+		model: withTracing(google("gemini-2.5-flash-preview-04-17"), phClient, {}),
 		providerOptions: {
 			google: {
 				thinkingConfig: {
@@ -64,5 +70,6 @@ export async function POST(req: Request) {
 		messages,
 	});
 
+	phClient.shutdown();
 	return result.toDataStreamResponse();
 }
