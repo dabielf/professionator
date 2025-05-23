@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Viewport } from "next";
 import { Geist_Mono } from "next/font/google";
 import { Raleway } from "next/font/google";
 import { Toaster } from "sonner";
@@ -14,50 +14,56 @@ const geistMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-	title: "Professionator",
-	description: "Stay professional while respecting your inner asshole",
-	openGraph: {
-		title: "Professionator",
-		description: "Stay professional while respecting your inner asshole",
-		type: "website",
-		url: process.env.PRODUCTION
-			? process.env.PRODUCTION_URL
-			: "http://localhost:3000",
-		siteName: "Professionator",
-		images: [
-			{
-				url: process.env.PRODUCTION
-					? `${process.env.PRODUCTION_URL}/Professionator@2x.jpg`
-					: "http://localhost:3000/Professionator@2x.jpg",
-				width: 1200,
-				height: 630,
-				alt: "Professionator",
-			},
-		],
-	},
-	twitter: {
-		title: "Professionator",
-		description: "Stay professional while respecting your inner asshole",
-		card: "summary_large_image",
-		images: [
-			{
-				url: process.env.PRODUCTION
-					? `${process.env.PRODUCTION_URL}/Professionator@2x.jpg`
-					: "http://localhost:3000/Professionator@2x.jpg",
-				width: 1200,
-				height: 630,
-				alt: "Professionator",
-			},
-		],
-	},
-	viewport: {
-		width: "device-width",
-		initialScale: 1.0,
-		maximumScale: 1.0, // This is key for the zoom issue
-		userScalable: false, // Next.js will translate this to user-scalable=no
-	},
+export const viewport: Viewport = {
+	width: "device-width",
+	initialScale: 1.0,
+	maximumScale: 1.0,
+	userScalable: false,
 };
+
+export async function generateMetadata() {
+	const title =
+		process.env.PRODUCTION === "true"
+			? "Professionator"
+			: "LOCAL: Communicator";
+	const url =
+		process.env.PRODUCTION === "true"
+			? process.env.PRODUCTION_URL
+			: "http://localhost:3000";
+
+	return {
+		title,
+		description: "Stay professional while respecting your inner asshole",
+		openGraph: {
+			title,
+			description: "Stay professional while respecting your inner asshole",
+			type: "website",
+			url,
+			siteName: "Professionator",
+			images: [
+				{
+					url: `${url}/Professionator@2x.jpg`,
+					width: 1200,
+					height: 630,
+					alt: "Professionator",
+				},
+			],
+		},
+		twitter: {
+			title,
+			description: "Stay professional while respecting your inner asshole",
+			card: "summary_large_image",
+			images: [
+				{
+					url: `${url}/Professionator@2x.jpg`,
+					width: 1200,
+					height: 630,
+					alt: "Professionator",
+				},
+			],
+		},
+	};
+}
 
 export default function RootLayout({
 	children,
