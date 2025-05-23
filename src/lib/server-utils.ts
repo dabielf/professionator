@@ -1,4 +1,5 @@
 import "server-only";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
-export const env = getCloudflareContext().env as Cloudflare.Env;
+export const getEnv = async () =>
+	(await getCloudflareContext({ async: true })).env as Cloudflare.Env;
