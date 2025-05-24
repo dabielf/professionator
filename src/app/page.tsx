@@ -23,8 +23,6 @@ export default function Page() {
 	const [language, setLanguage] = useState<string | "base">("base");
 	const { messages, setMessages, input, setInput, append, stop } = useChat();
 
-	console.log(language);
-
 	function LanguageSelector() {
 		return (
 			<div className="flex-1 flex items-center w-full">
@@ -33,7 +31,7 @@ export default function Page() {
 					onChange={(e) => {
 						setLanguage(e.target.value);
 					}}
-					className="select select-accent w-full"
+					className="select select-accent w-full p-2"
 				>
 					<option disabled={true} value="base">
 						Select the language for your answer
@@ -81,7 +79,7 @@ export default function Page() {
 					<TabsTrigger
 						value="professional"
 						className="flex-1 text-base"
-						disabled={!input}
+						disabled={!input || !messages[1]}
 					>
 						<SmilePlus className="size-4 mr-2" />
 						Be Professional
