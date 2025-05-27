@@ -1,0 +1,39 @@
+{
+	"main": ".open-next/worker.js",
+	"name": "communicator",
+	"vars": {
+		"PRODUCTION": "true"
+	},
+	"compatibility_date": "2025-03-25",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 1
+	},
+	"placement": {
+		"mode": "smart"
+	},
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "communicator_db",
+			"database_id": "88d4c0d8-046c-4fa9-b221-6c06394b8aa1"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "c4f47d51390a46079b6d54d4cb8b68c1"
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "BUCKET",
+			"bucket_name": "communicator-bucket"
+		}
+	]
+}
